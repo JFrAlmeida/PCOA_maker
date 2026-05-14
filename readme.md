@@ -13,13 +13,13 @@ Inkscape or similar to then work the legend however you see fit
 
 ### Installation:
 Open the terminal, and navigate to where you want your PCOA maker to be in, then type in the temrinal:
-"""
+'''
 	git clone https://github.com/JFrAlmeida/PCOA_maker.git
 	cd PCOA_maker
 
 	conda env create -f environment.yml
 	conda activate pcoa_maker
-"""
+'''
 ### Settings:
 !! Check the settings inside PCOA_Maker.py !!
 
@@ -37,9 +37,9 @@ Your counts files, place them in PCOA_maker/counts_files
 
 ### Usage:
 An example counts file and groups file is already in your folders, just run the following once, and check your Outputs:
-"""
+'''
 python PCOA_Maker.py
-"""
+'''
 
 
 
