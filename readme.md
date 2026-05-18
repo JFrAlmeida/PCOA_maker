@@ -32,7 +32,7 @@ allows:
 
 ### What do I prepare for the PCOA
 
-A goups file, following the same format as that in the PCOA_maker/groups/ folder
+A goups file, following the same format as that in the PCOA_maker/groups/ folder  
 Your counts files, place them in PCOA_maker/counts_files
 
 ### Usage:
