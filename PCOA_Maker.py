@@ -116,10 +116,20 @@ for file in list_files:
     df_hellinger = df_hellinger.T
 
     if not sorted(df_hellinger.index.to_list()) == sorted(df_groups.index.to_list()):
-        print("heellinger_T ->", sorted(df_hellinger.index.to_list()))
-        print("groups ->", sorted(df_groups.index.to_list()))
-        print(f"The indexes for your groups file and counts file are not the same; Ensure they are and run again"
+        # print("heellinger_T ->", sorted(df_hellinger.index.to_list()))
+        # print("groups ->", sorted(df_groups.index.to_list()))
+
+        with open("Log/Check_index.csv", "w", encoding="utf-8") as f:
+            f.write("counts,groups\n")
+            for item1, item2 in zip(df_hellinger.index.to_list(), df_groups.index.to_list()):
+                f.write(f"{item1},{item2}\n")
+
+        print(f"The indexes for your groups file and counts file are not the same; Ensure they are and run again."
+              f"\n a list with them was made in Log/Check_index.csv"
               f"\n quitting...")
+
+
+
         quit()
 
     # calculate the bray curtis distance matrix
@@ -146,21 +156,36 @@ for file in list_files:
 
     #make a list for each
 
+    # This bit works, try another
+    #
+    # color_map_dict = pd.Series(df_pcoa.Color.values,index=df_pcoa.Groups).to_dict()
+    #
+    # colors = df_pcoa["Groups"].map(color_map_dict)
+    # categories = df_pcoa["Groups"].astype("category").cat.categories
+    # legend_plot = [
+    #     Line2D(
+    #         [0], [0],
+    #         marker="o",
+    #         color="w",
+    #         label=cat,
+    #         markerfacecolor=color_map_dict[cat],
+    #         markersize=8
+    #     )
+    #     for cat in categories
+    # ]
 
-    color_map_dict = pd.Series(df_pcoa.Color.values,index=df_pcoa.Groups).to_dict()
-
-    colors = df_pcoa["Groups"].map(color_map_dict)
-    categories = df_pcoa["Groups"].astype("category").cat.categories
+    color_list = list(dict.fromkeys(df_groups["Color"].to_list()))
+    groups_list = list(dict.fromkeys(df_groups["Groups"].to_list()))
     legend_plot = [
         Line2D(
             [0], [0],
             marker="o",
             color="w",
-            label=cat,
-            markerfacecolor=color_map_dict[cat],
+            label=label,
+            markerfacecolor=color,
             markersize=8
         )
-        for cat in categories
+        for label,color in zip(groups_list,color_list)
     ]
 
     proportion_series = pcoa_result.proportion_explained * 100  # Now in %
@@ -170,6 +195,9 @@ for file in list_files:
     label_PC2 = ("PC2 (" + str(round(proportion_series["PC2"], 2)) + " %)")
 
     # Make graph
+    color_map_dict = pd.Series(df_pcoa.Color.values,index=df_pcoa.Groups).to_dict()
+    colors = df_pcoa["Groups"].map(color_map_dict)
+    
     fig, ax = plt.subplots()
     ax.scatter(df_pcoa["PC1"], df_pcoa["PC2"], c=colors)
     plt.title(file.replace("_counts.csv", ""))
